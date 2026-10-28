@@ -2,20 +2,24 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
-  Search,
-  ZoomIn,
-  ZoomOut,
-  Maximize,
   Database,
+  Loader2,
+  Minus,
+  MousePointerClick,
+  Plus,
+  RotateCcw,
+  Search,
   X,
 } from "lucide-react";
 import RadialChart from "@/components/radial-chart";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
+import { cn } from "@/lib/utils";
 import type {
   GradientStop,
   RadiusKey,
+  RadiusMeta,
   RadiusTexture,
   RelationKey,
   SceneDataset,
@@ -39,13 +43,158 @@ function toggleInSet<T>(set: Set<T>, value: T): Set<T> {
   return next;
 }
 
+/** 图例色带：竖向渐变，方向与「内圈→外沿」一致 */
+function gradientCss(meta: RadiusMeta | undefined): string {
+  if (!meta) return "#dbe6de";
+  if (!meta.gradient) return meta.color;
+  return `linear-gradient(180deg, ${meta.gradient
+    .map(([t, c]: GradientStop) => `${c} ${(t * 100).toFixed(0)}%`)
+    .join(", ")})`;
+}
+
+interface SceneDetailProps {
+  scene: SceneItem;
+  radiusName: string;
+  radiusColor: string;
+  relationName: string;
+  onClose: () => void;
+}
+
+/** 选中场景详情（左栏与移动端抽屉共用） */
+function SceneDetail({
+  scene,
+  radiusName,
+  radiusColor,
+  relationName,
+  onClose,
+}: SceneDetailProps) {
+  return (
+    <div>
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <p className="text-[9.5px] tracking-[0.2em] text-muted-foreground">
+            SELECTED
+          </p>
+          <h2 className="mt-1.5 font-serif text-[16px] leading-snug font-semibold text-ink">
+            {scene.name}
+          </h2>
+        </div>
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="关闭详情"
+          className="-mt-1 -mr-1 rounded-full p-1.5 text-muted-foreground transition-colors hover:bg-paper hover:text-ink"
+        >
+          <X size={14} />
+        </button>
+      </div>
+      <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
+        <span className="inline-flex items-center gap-1.5 rounded-full border border-line bg-paper/70 px-2.5 py-0.5 text-[10.5px] text-ink-soft">
+          <span
+            className="size-1.5 rounded-full"
+            style={{ backgroundColor: radiusColor }}
+          />
+          {radiusName}
+        </span>
+        <span className="rounded-full border border-line bg-paper/70 px-2.5 py-0.5 text-[10.5px] text-ink-soft">
+          {relationName}
+        </span>
+        {scene.weightLabel && (
+          <span className="rounded-full bg-mint px-2.5 py-0.5 text-[10.5px] text-sage-deep">
+            占比 {scene.weightLabel}
+          </span>
+        )}
+      </div>
+      <p className="mt-2.5 text-[12px] leading-[1.8] text-ink-soft">
+        {scene.description}
+      </p>
+    </div>
+  );
+}
+
+interface RadiusLegendProps {
+  radii: RadiusMeta[];
+  hits: (key: RadiusKey) => number;
+  selected: Set<RadiusKey>;
+  onToggle: (key: RadiusKey) => void;
+  hasActiveFilter: boolean;
+}
+
+/** 出行半径图例（全站唯一一处）：兼作图例与径向筛选 */
+function RadiusLegend({
+  radii,
+  hits,
+  selected,
+  onToggle,
+  hasActiveFilter,
+}: RadiusLegendProps) {
+  return (
+    <div>
+      <div className="flex items-baseline justify-between gap-2">
+        <h2 className="font-serif text-[12.5px] font-semibold text-ink">
+          出行半径
+        </h2>
+        <span className="text-[9.5px] tracking-[0.14em] text-muted-foreground">
+          径向四层 · 点击筛选
+        </span>
+      </div>
+      <ul className="mt-2 space-y-0.5">
+        {radii.map((r) => {
+          const hit = hits(r.key);
+          const on = selected.has(r.key);
+          const dim = hasActiveFilter && hit === 0;
+          return (
+            <li key={r.key}>
+              <button
+                type="button"
+                aria-pressed={on}
+                onClick={() => onToggle(r.key)}
+                className={cn(
+                  "flex w-full items-center gap-3 rounded-xl px-2 py-1.5 text-left transition-colors duration-200",
+                  on ? "bg-mint/60" : "hover:bg-mint/35",
+                  dim && "opacity-45",
+                )}
+              >
+                <span
+                  className="h-8 w-1.5 shrink-0 rounded-full ring-1 ring-black/5 ring-inset"
+                  style={{ backgroundImage: gradientCss(r) }}
+                />
+                <span className="min-w-0 flex-1">
+                  <span className="flex items-baseline justify-between gap-2">
+                    <span
+                      className={cn(
+                        "text-[12px] text-ink",
+                        on && "font-medium text-sage-deep",
+                      )}
+                    >
+                      {r.name}
+                    </span>
+                    <span className="font-display text-[12px] text-muted-foreground">
+                      {hit}
+                    </span>
+                  </span>
+                  <span className="mt-0.5 line-clamp-1 text-[10px] leading-relaxed text-muted-foreground">
+                    {r.description}
+                  </span>
+                </span>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+}
+
 export default function SceneExplorer() {
   const [dataset, setDataset] = useState<SceneDataset | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const [query, setQuery] = useState("");
-  const [relations, setRelations] = useState<Set<RelationKey>>(new Set());
-  const [radii, setRadii] = useState<Set<RadiusKey>>(new Set());
+  const [relationFilter, setRelationFilter] = useState<Set<RelationKey>>(
+    new Set(),
+  );
+  const [radiusFilter, setRadiusFilter] = useState<Set<RadiusKey>>(new Set());
   const [proportional, setProportional] = useState(true);
   const [selected, setSelected] = useState<SceneItem | null>(null);
 
@@ -132,23 +281,25 @@ export default function SceneExplorer() {
   const activeScenes = useMemo(() => {
     const q = query.trim().toLowerCase();
     return scenes.filter((s) => {
-      if (relations.size > 0 && !relations.has(s.relation)) return false;
-      if (radii.size > 0 && !radii.has(s.radius)) return false;
+      if (relationFilter.size > 0 && !relationFilter.has(s.relation)) {
+        return false;
+      }
+      if (radiusFilter.size > 0 && !radiusFilter.has(s.radius)) return false;
       if (q) {
         const hay = `${s.name} ${s.description}`.toLowerCase();
         if (!hay.includes(q)) return false;
       }
       return true;
     });
-  }, [scenes, query, relations, radii]);
+  }, [scenes, query, relationFilter, radiusFilter]);
 
   const hasFilter =
-    query.trim() !== "" || relations.size > 0 || radii.size > 0;
+    query.trim() !== "" || relationFilter.size > 0 || radiusFilter.size > 0;
 
   const clearFilters = useCallback(() => {
     setQuery("");
-    setRelations(new Set());
-    setRadii(new Set());
+    setRelationFilter(new Set());
+    setRadiusFilter(new Set());
   }, []);
 
   const handleSelect = useCallback((scene: SceneItem) => {
@@ -167,283 +318,296 @@ export default function SceneExplorer() {
     [activeScenes],
   );
 
+  const toggleRadius = useCallback((key: RadiusKey) => {
+    setRadiusFilter((prev) => toggleInSet(prev, key));
+  }, []);
+
   return (
-    <div className="flex h-[100dvh] flex-col overflow-hidden bg-[#eff1f3] text-[#24272c]">
-      {/* 顶栏（单行紧凑） */}
-      <header className="flex shrink-0 items-center justify-between gap-3 border-b border-[#dfe2e6] px-4 py-2.5 sm:px-6">
-        <div className="flex min-w-0 items-center gap-2.5">
-          <span className="font-script shrink-0 text-[22px] font-bold leading-none text-[#009933]">
-            Will On Wheel
-          </span>
-          <h1 className="truncate text-[13px] font-bold tracking-wide text-[#222222] sm:text-[15px]">
-            场景矩阵
-          </h1>
-          <span className="hidden shrink-0 text-[11px] text-[#555555] md:inline">
-            出行半径 × 关系半径
-          </span>
-        </div>
-        <div className="flex shrink-0 items-center gap-1.5 text-[11px] text-[#6c7178]">
-          <Database size={13} />
-          {error ? (
-            <span className="text-[#c2453a]">数据读取失败：{error}</span>
-          ) : dataset ? (
-            <span>
-              {dataset.source === "feishu" ? "飞书知识库" : "内置场景集"} ·{" "}
-              {scenes.length} 场景
-              {typeof dataset.skippedCount === "number" &&
-                dataset.skippedCount > 0 && (
-                  <span className="text-[#9aa0a8]">
-                    {" "}
-                    （{dataset.skippedCount} 条未识别已跳过）
-                  </span>
-                )}
-            </span>
-          ) : (
-            <span>数据加载中…</span>
-          )}
-        </div>
-      </header>
-
-      {/* 控制条（单行，可横向滚动） */}
-      <section className="flex shrink-0 items-center gap-2 overflow-x-auto border-b border-[#dfe2e6] px-4 py-2 sm:px-6">
-        <div className="relative w-44 shrink-0 sm:w-52">
-          <Search
-            size={14}
-            className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-[#868b93]"
-          />
-          <Input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="检索场景名称 / 关键词"
-            className="h-8 rounded-none border-[#d3d7dc] bg-[#fafbfc] pl-8 text-[12px] shadow-none focus-visible:ring-[#2f5f8f]"
-          />
-        </div>
-
-        <div className="flex shrink-0 items-center gap-1">
-          {RELATION_KEYS.map((key) => {
-            const on = relations.has(key);
-            return (
-              <button
-                key={key}
-                type="button"
-                onClick={() => setRelations((prev) => toggleInSet(prev, key))}
-                className={`border px-2 py-1 text-[11.5px] whitespace-nowrap transition-colors ${
-                  on
-                    ? "border-[#2f5f8f] bg-[#2f5f8f] text-[#eff1f3]"
-                    : "border-[#d3d7dc] bg-[#fafbfc] text-[#565b62] hover:border-[#2f5f8f]"
-                }`}
-              >
-                {relationNameMap[key] ?? key}
-              </button>
-            );
-          })}
-        </div>
-
-        <span className="h-4 w-px shrink-0 bg-[#d3d7dc]" />
-
-        <div className="flex shrink-0 items-center gap-1">
-          {RADIUS_KEYS.map((key) => {
-            const on = radii.has(key);
-            const meta = dataset?.radii.find((r) => r.key === key);
-            return (
-              <button
-                key={key}
-                type="button"
-                onClick={() => setRadii((prev) => toggleInSet(prev, key))}
-                className={`flex items-center gap-1.5 border px-2 py-1 text-[11.5px] whitespace-nowrap transition-colors ${
-                  on
-                    ? "border-[#24272c] bg-[#24272c] text-[#eff1f3]"
-                    : "border-[#d3d7dc] bg-[#fafbfc] text-[#565b62] hover:border-[#24272c]"
-                }`}
-              >
-                <span
-                  className="inline-block h-2 w-2"
-                  style={{ backgroundColor: meta?.color ?? "#999" }}
-                />
-                {meta?.name ?? key.toUpperCase()}
-              </button>
-            );
-          })}
-        </div>
-
-        <label
-          htmlFor="proportional-switch"
-          className="flex shrink-0 cursor-pointer items-center gap-1.5 text-[11.5px] text-[#565b62]"
-        >
-          <Switch
-            id="proportional-switch"
-            checked={proportional}
-            onCheckedChange={setProportional}
-            className="data-[state=checked]:bg-[#2f5f8f]"
-          />
-          动态填充
-        </label>
-
-        <div className="ml-auto flex shrink-0 items-center gap-1">
-          <Button
-            variant="outline"
-            size="icon"
-            className="h-7 w-7 rounded-none border-[#d3d7dc] bg-[#fafbfc]"
-            onClick={() => setZoomInTick((t) => t + 1)}
-            aria-label="放大"
-          >
-            <ZoomIn size={14} />
-          </Button>
-          <Button
-            variant="outline"
-            size="icon"
-            className="h-7 w-7 rounded-none border-[#d3d7dc] bg-[#fafbfc]"
-            onClick={() => setZoomOutTick((t) => t + 1)}
-            aria-label="缩小"
-          >
-            <ZoomOut size={14} />
-          </Button>
-          <Button
-            variant="outline"
-            size="icon"
-            className="h-7 w-7 rounded-none border-[#d3d7dc] bg-[#fafbfc]"
-            onClick={() => setResetTick((t) => t + 1)}
-            aria-label="复位视图"
-          >
-            <Maximize size={13} />
-          </Button>
-          {hasFilter && (
-            <button
-              type="button"
-              onClick={clearFilters}
-              className="ml-1 whitespace-nowrap text-[11.5px] text-[#2f5f8f] underline-offset-2 hover:underline"
-            >
-              清除筛选
-            </button>
-          )}
-        </div>
-      </section>
-
-      {/* 主图区（占满剩余空间，扇形贴右下角） */}
-      <main className="relative min-h-0 flex-1">
-        {dataset ? (
-          <RadialChart
-            scenes={scenes}
-            radiusColors={radiusColorMap}
-            radiusGradients={radiusGradientMap}
-            radiusTextures={radiusTextureMap}
-            radiusNames={radiusNameMap}
-            relationNames={relationNameMap}
-            relationDescs={relationDescMap}
-            activeScenes={activeScenes}
-            proportional={proportional}
-            selectedId={selected?.id ?? null}
-            onSelect={handleSelect}
-            zoomInTick={zoomInTick}
-            zoomOutTick={zoomOutTick}
-            resetTick={resetTick}
-          />
-        ) : (
-          <div className="flex h-full items-center justify-center text-[13px] text-[#868b93]">
-            {error ? `加载失败：${error}` : "正在解析场景数据…"}
-          </div>
-        )}
-
-        {/* 图例浮层（左上） */}
-        {dataset && (
-          <div className="panel-in pointer-events-none absolute left-4 top-3 max-w-[300px] border border-[#dfe2e6] bg-[#fafbfc]/90 p-3 shadow-sm backdrop-blur-sm sm:left-6 sm:top-4">
-            <div className="flex items-baseline justify-between gap-3">
-              <span className="text-[11px] tracking-widest text-[#868b93]">
-                出行半径 · 径向四层
+    <div className="min-h-[100dvh] lg:h-[100dvh] lg:overflow-hidden">
+      <div className="flex flex-col lg:h-full lg:flex-row">
+        {/* 左栏：标题 + 控件 + 出行半径图例 + 选中详情 */}
+        <aside className="order-1 shrink-0 px-5 pt-5 sm:px-7 sm:pt-6 lg:h-full lg:w-[372px] lg:overflow-y-auto lg:overscroll-contain lg:border-r lg:border-line lg:px-7 lg:pt-7 xl:w-[412px] xl:px-8">
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex items-center gap-2.5">
+              <span className="grid size-9 place-items-center rounded-2xl bg-white text-sage-deep shadow-soft ring-1 ring-line">
+                <span className="font-display text-[14px] leading-none italic">
+                  W
+                </span>
               </span>
-              <span className="text-[11px] text-[#868b93]">
-                命中{" "}
-                <strong className="text-[13px] font-bold text-[#009933]">
-                  {activeScenes.length}
-                </strong>
-                /{scenes.length}
-              </span>
+              <div>
+                <p className="font-display text-[17px] leading-none text-sage-deep italic">
+                  Will On Wheel
+                </p>
+                <p className="mt-1.5 text-[9px] tracking-[0.32em] text-muted-foreground">
+                  SCENE MATRIX
+                </p>
+              </div>
             </div>
-            <div className="mt-2 flex flex-col gap-2">
-              {dataset.radii.map((r) => (
-                <div key={r.key}>
-                  <div className="flex items-center gap-1.5">
-                    <span
-                      className="rounded-[3px] px-1.5 py-[3px] text-[11px] font-bold leading-none text-white"
-                      style={{
-                        backgroundImage: r.gradient
-                          ? `linear-gradient(90deg, ${r.gradient
-                              .map(
-                                ([t, c]) =>
-                                  `${c} ${(t * 100).toFixed(0)}%`,
-                              )
-                              .join(", ")})`
-                          : r.color,
-                      }}
-                    >
-                      {r.name}
-                    </span>
-                    <span className="text-[10.5px] text-[#868b93]">
-                      {radiusHit(r.key)}
-                    </span>
-                  </div>
-                  <p className="mt-1 text-[10px] leading-snug text-[#868b93]">
-                    {r.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-            <p className="mt-2 border-t border-[#dfe2e6] pt-1.5 text-[10.5px] leading-relaxed text-[#868b93]">
-              角度方向 = 关系半径六类，径向四层可点选上方出行半径标签筛选
-            </p>
-          </div>
-        )}
-
-        {/* 选中详情浮层（左下） */}
-        {selected && (
-          <div className="panel-in absolute bottom-3 left-4 max-w-[340px] border border-[#dfe2e6] bg-[#fafbfc]/95 p-3.5 shadow-md backdrop-blur-sm sm:bottom-5 sm:left-6">
-            <div className="flex items-start justify-between gap-3">
-              <h3 className="text-[14px] font-semibold text-[#24272c]">
-                {selected.name}
-              </h3>
-              <button
-                type="button"
-                onClick={() => setSelected(null)}
-                className="mt-0.5 text-[#868b93] transition-colors hover:text-[#24272c]"
-                aria-label="关闭详情"
-              >
-                <X size={14} />
-              </button>
-            </div>
-            <p className="mt-1.5 text-[11.5px] leading-relaxed text-[#6c7178]">
-              {selected.description}
-            </p>
-            <div className="mt-2 flex items-center gap-2 border-t border-[#dfe2e6] pt-2 text-[11px]">
-              <span className="flex items-center gap-1.5 text-[#24272c]">
-                <span
-                  className="inline-block h-2 w-2"
-                  style={{
-                    backgroundColor: radiusColorMap[selected.radius],
-                  }}
-                />
-                {dataset?.radii.find((r) => r.key === selected.radius)?.name}
-              </span>
-              <span className="h-3 w-px bg-[#d3d7dc]" />
-              <span className="text-[#6c7178]">
-                {relationNameMap[selected.relation]}
-              </span>
-              {selected.weightLabel && (
-                <>
-                  <span className="h-3 w-px bg-[#d3d7dc]" />
-                  <span className="font-semibold text-[#009933]">
-                    占比 {selected.weightLabel}
-                  </span>
-                </>
+            <span
+              className={cn(
+                "inline-flex shrink-0 items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10.5px]",
+                error
+                  ? "border-[#e6c9c5] bg-[#fbf2f0] text-[#a9504a]"
+                  : "border-line bg-white/70 text-ink-soft",
               )}
-            </div>
+              title={
+                error
+                  ? error
+                  : dataset
+                    ? dataset.source === "feishu"
+                      ? "数据来自飞书多维表格"
+                      : "数据来自内置场景集"
+                    : "正在读取数据"
+              }
+            >
+              <Database size={11} className={error ? "" : "text-sage"} />
+              {error
+                ? "读取失败"
+                : dataset
+                  ? dataset.source === "feishu"
+                    ? "飞书多维表格"
+                    : "内置场景集"
+                  : "连接中" }
+            </span>
           </div>
-        )}
 
-        {/* 操作提示 */}
-        <p className="pointer-events-none absolute bottom-3 right-4 hidden text-[10.5px] text-[#9aa0a8] sm:block">
-          滚轮缩放 · 拖拽平移 · 点击扇形查看详情
-        </p>
-      </main>
+          <h1 className="mt-6 font-serif text-[25px] leading-[1.28] font-semibold text-ink xl:text-[28px]">
+            车生活场景矩阵
+          </h1>
+          <p className="mt-2.5 max-w-[330px] text-[12px] leading-[1.85] text-ink-soft">
+            径向四层是出行半径，角度六类是关系半径；每个格子都是一个真实场景，
+            面积与占比同源。
+          </p>
+
+          <div className="mt-4 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[10.5px] text-muted-foreground">
+            <span className="flex items-baseline gap-1">
+              <b className="font-display text-[17px] leading-none font-normal text-ink">
+                {scenes.length || "—"}
+              </b>
+              个场景
+            </span>
+            <span className="size-0.5 rounded-full bg-line" />
+            <span className="flex items-baseline gap-1">
+              命中
+              <b className="font-display text-[17px] leading-none font-normal text-sage-deep">
+                {activeScenes.length}
+              </b>
+            </span>
+            <span className="size-0.5 rounded-full bg-line" />
+            <span>6 类 × 4 层</span>
+            {typeof dataset?.skippedCount === "number" &&
+              dataset.skippedCount > 0 && (
+                <span className="text-muted-foreground/70">
+                  · {dataset.skippedCount} 条未识别
+                </span>
+              )}
+          </div>
+
+          <div className="relative mt-5">
+            <Search
+              size={14}
+              className="pointer-events-none absolute top-1/2 left-3.5 -translate-y-1/2 text-muted-foreground"
+            />
+            <Input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="检索场景名称 / 关键词"
+              className="h-9 rounded-full border-line bg-white/70 pl-9 text-[12px] shadow-none transition-colors placeholder:text-muted-foreground focus-visible:border-sage focus-visible:bg-white focus-visible:ring-sage/20"
+            />
+          </div>
+
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            {RELATION_KEYS.map((key) => {
+              const on = relationFilter.has(key);
+              return (
+                <button
+                  key={key}
+                  type="button"
+                  aria-pressed={on}
+                  onClick={() =>
+                    setRelationFilter((prev) => toggleInSet(prev, key))
+                  }
+                  className={cn(
+                    "rounded-full border px-2.5 py-1 text-[11px] whitespace-nowrap transition-all duration-200",
+                    on
+                      ? "border-sage-deep bg-sage-deep text-white"
+                      : "border-line bg-white/70 text-ink-soft hover:border-sage/40 hover:bg-mint/45 hover:text-sage-deep",
+                  )}
+                >
+                  {relationNameMap[key] ?? key}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="mt-3 flex items-center justify-between gap-3">
+            <label
+              htmlFor="proportional-switch"
+              className="flex cursor-pointer items-center gap-2 text-[11px] whitespace-nowrap text-ink-soft"
+            >
+              <Switch
+                id="proportional-switch"
+                checked={proportional}
+                onCheckedChange={setProportional}
+                className="data-[state=checked]:bg-sage-deep"
+              />
+              按占比动态填充
+            </label>
+            {hasFilter && (
+              <button
+                type="button"
+                onClick={clearFilters}
+                className="inline-flex items-center gap-1 rounded-full px-2 py-1 text-[11px] whitespace-nowrap text-sage-deep transition-colors hover:bg-mint/60"
+              >
+                <X size={11} />
+                清除筛选
+              </button>
+            )}
+          </div>
+
+          <div className="mt-6 hidden border-t border-line/80 pt-4 lg:block">
+            <RadiusLegend
+              radii={dataset?.radii ?? []}
+              hits={radiusHit}
+              selected={radiusFilter}
+              onToggle={toggleRadius}
+              hasActiveFilter={activeScenes.length > 0}
+            />
+          </div>
+
+          <div className="mt-5 hidden border-t border-line/80 pt-4 pb-8 lg:block">
+            {selected ? (
+              <div className="panel-in">
+                <SceneDetail
+                  scene={selected}
+                  radiusName={radiusNameMap[selected.radius] ?? selected.radius}
+                  radiusColor={radiusColorMap[selected.radius] ?? "#c8d6cd"}
+                  relationName={relationNameMap[selected.relation] ?? ""}
+                  onClose={() => setSelected(null)}
+                />
+              </div>
+            ) : (
+              <div className="flex items-start gap-2.5">
+                <MousePointerClick
+                  size={14}
+                  className="mt-0.5 shrink-0 text-sage/80"
+                  strokeWidth={1.6}
+                />
+                <p className="text-[11px] leading-relaxed text-muted-foreground">
+                  点击任意扇形，查看场景释义、关系归类与占比。
+                </p>
+              </div>
+            )}
+          </div>
+        </aside>
+
+        {/* 右侧：扇形全高铺展 */}
+        <main className="relative order-2 h-[440px] shrink-0 sm:h-[540px] lg:h-full lg:min-h-0 lg:flex-1 lg:shrink">
+          {dataset ? (
+            <RadialChart
+              scenes={scenes}
+              radiusColors={radiusColorMap}
+              radiusGradients={radiusGradientMap}
+              radiusTextures={radiusTextureMap}
+              radiusNames={radiusNameMap}
+              relationNames={relationNameMap}
+              relationDescs={relationDescMap}
+              activeScenes={activeScenes}
+              proportional={proportional}
+              selectedId={selected?.id ?? null}
+              onSelect={handleSelect}
+              zoomInTick={zoomInTick}
+              zoomOutTick={zoomOutTick}
+              resetTick={resetTick}
+            />
+          ) : (
+            <div className="grid h-full place-items-center">
+              <div className="flex flex-col items-center gap-2.5 text-center">
+                {error ? (
+                  <>
+                    <p className="text-[12.5px] text-[#a9504a]">数据加载失败</p>
+                    <p className="max-w-[260px] text-[11px] leading-relaxed text-muted-foreground">
+                      {error}
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <Loader2 size={18} className="animate-spin text-sage" />
+                    <p className="text-[12px] text-muted-foreground">
+                      正在铺展场景…
+                    </p>
+                  </>
+                )}
+              </div>
+            </div>
+          )}
+
+          <div className="absolute top-3 right-3 z-10 flex items-center gap-1 rounded-full border border-line bg-white/75 p-1 shadow-soft backdrop-blur-sm sm:top-4 sm:right-5">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-7 rounded-full text-ink-soft hover:bg-mint hover:text-sage-deep"
+              onClick={() => setZoomOutTick((t) => t + 1)}
+              aria-label="缩小"
+            >
+              <Minus size={14} />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-7 rounded-full text-ink-soft hover:bg-mint hover:text-sage-deep"
+              onClick={() => setResetTick((t) => t + 1)}
+              aria-label="复位视图"
+            >
+              <RotateCcw size={13} />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-7 rounded-full text-ink-soft hover:bg-mint hover:text-sage-deep"
+              onClick={() => setZoomInTick((t) => t + 1)}
+              aria-label="放大"
+            >
+              <Plus size={14} />
+            </Button>
+          </div>
+
+          <p className="pointer-events-none absolute right-4 bottom-3 hidden text-[10px] text-muted-foreground/80 sm:block lg:right-6 lg:bottom-5">
+            ⌘/Ctrl + 滚轮缩放 · 拖拽平移
+          </p>
+        </main>
+
+        {/* 移动端：图例置于图下，页面可纵向滚动 */}
+        <div className="order-3 px-5 pt-5 pb-8 sm:px-7 lg:hidden">
+          <div className="border-t border-line/80 pt-4">
+            <RadiusLegend
+              radii={dataset?.radii ?? []}
+              hits={radiusHit}
+              selected={radiusFilter}
+              onToggle={toggleRadius}
+              hasActiveFilter={activeScenes.length > 0}
+            />
+          </div>
+          <p className="mt-4 text-[10px] leading-relaxed text-muted-foreground">
+            场景数据来自飞书知识库，未配置凭证时使用内置场景集。
+          </p>
+        </div>
+      </div>
+
+      {/* 选中详情（移动端底部抽屉） */}
+      {selected && (
+        <div className="fixed inset-x-3 bottom-3 z-40 lg:hidden">
+          <div className="sheet-up rounded-card border border-line bg-white/95 p-4 shadow-lift backdrop-blur-md">
+            <SceneDetail
+              scene={selected}
+              radiusName={radiusNameMap[selected.radius] ?? selected.radius}
+              radiusColor={radiusColorMap[selected.radius] ?? "#c8d6cd"}
+              relationName={relationNameMap[selected.relation] ?? ""}
+              onClose={() => setSelected(null)}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

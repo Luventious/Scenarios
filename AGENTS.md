@@ -72,8 +72,9 @@
 | `src/lib/builtin-data.ts` | 内置 56 个车生活场景、4 个出行半径元数据、6 类关系半径元数据 | `RADII`、`RELATIONS`、`BUILTIN_SCENES` |
 | `src/lib/feishu.ts` | 飞书多维表格适配：tenant token 获取、wiki 链接 token 解析、数据表自动发现、分页拉取、字段解析/归一化（含《占比》weight）；未配置凭证时回退内置数据 | `getFeishuConfig`、`fetchFeishuDataset`、`parseFeishuRecords`、`builtinDataset` |
 | `src/lib/geometry.ts` | 动态扇形填充算法：类别角宽按活跃场景数占比（`proportional`）；R1/R2 每场景一行从里到外堆叠（只横切，角宽全开），R3/R4 二分行 + 行内按《占比》竖切（格子面积 ∝ 占比，缺省等权）；缝隙体系：区内各向同性 `cellGap×r`，扇区（出行半径层）间 `zoneGap×r`（= 区内 3 倍，仅三条内部边界）；空（关系×半径）分区输出占位色块（`placeholders`）维持矩阵网格完整；极坐标/扇区 path 生成 | `buildLayout`、`arcPath`、`polar`、`Layout`、`Cell`、`PlaceholderCell` |
-| `src/components/radial-chart.tsx` | SVG 径向扇形矩阵（120° 扇面）：滚轮/按钮缩放、拖拽平移、悬停 tooltip、点击选中、无填充色带的艺术字关系标题（细弧经纬线 + 思源宋体中文 + Playfair 斜体英文注记）、场景名与标题均沿弧弯曲排布（textPath 贴弧线居中）、字号「弧长×行高」双约束自适应；每层一条多停靠点径向一体渐变（源渐变 0% 贴内圈/100% 贴外沿，同半径同色不逐格渐变）+ 分区织纹极坐标覆层（平行流向=放射细线/垂直=同心弧线，静态几何） | `RadialChart`（默认导出）、`HoverInfo` |
-| `src/components/scene-explorer.tsx` | 页面主组件：数据加载、检索/筛选状态、统计条、图例、详情条（含占比展示）、响应式布局 | `SceneExplorer`（默认导出） |
+| `src/components/radial-chart.tsx` | SVG 径向扇形矩阵（120° 扇面，等比居中 `xMidYMid meet`）：单一 rAF 时间轴驱动的「折扇展开」出场动画（全部扇区角度先收拢到扇面起点，再连续张开；取代逐格 CSS pop）+ 筛选后角度/半径补间、⌘/Ctrl+滚轮与按钮缩放、拖拽平移（3px 死区）、悬停 tooltip（6px 节流）、点击选中、无填充色带的艺术字关系标题（细弧经纬线 + 思源宋体中文 + Playfair 斜体英文注记）、场景名与标题均沿弧弯曲排布（textPath 贴弧线居中）、墨绿字 + 白色 halo、字号「弧长×行高」双约束自适应；每层一条多停靠点径向一体渐变 + 分区织纹极坐标覆层 | `RadialChart`（默认导出）、`HoverInfo` |
+| `src/components/scene-explorer.tsx` | 页面主组件（杂志式纵向排布，不再一屏锁死）：页头 + 标题区统计条 + 胶囊筛选控制条 + 图表卡（卡内含缩放三键与 HOW TO READ 注解）+ 侧栏（出行半径图例 / 选中详情，lg 起 sticky）；移动端详情改为底部抽屉 | `SceneExplorer`（默认导出） |
+| `src/app/globals.css` | 全局设计令牌（`paper/ink/sage/mint/line`、`radius-card`、`shadow-soft|lift`、`ease-soft`）+ 纸感环境底 + `.rise-in/.sheet-up/.breathe-arc` 动效基元；规范见 `DESIGN.md` | - |
 | `src/app/api/scenes/route.ts` | `GET /api/scenes`：飞书已配置则真实调用飞书 API（失败返回 502），否则返回内置数据集 | - |
 
 ### 飞书数据源接入
