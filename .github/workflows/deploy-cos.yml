@@ -1,0 +1,59 @@
+name: Deploy Scenarios to Tencent COS
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# 站点在桶内的子目录路径。必须与构建注入的 basePath 完全一致：
+# 改这里的同时，如果桶内目录名变了，上传目标和页面资源前缀会一起跟着这个值变。
+env:
+  COS_SUB_PATH: /scenarios
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build static export
+        run: pnpm build:static
+        env:
+          NEXT_PUBLIC_BASE_PATH: ${{ env.COS_SUB_PATH }}
+          # 可选：配置了飞书凭证就把多维表格固化为快照；留空则自动回退内置 56 条场景。
+          FEISHU_APP_ID: ${{ secrets.FEISHU_APP_ID }}
+          FEISHU_APP_SECRET: ${{ secrets.FEISHU_APP_SECRET }}
+          FEISHU_WIKI_TOKEN: ${{ secrets.FEISHU_WIKI_TOKEN }}
+
+      - name: Sanity check artifact
+        run: |
+          test -f out/index.html
+          test -f out/data/scenes.json
+          # basePath 生效后，页面里的资源链接必须带子目录前缀，否则说明构建没拿到变量
+          if ! grep -q "${COS_SUB_PATH}/_next/" out/index.html; then
+            echo "::error::out/index.html 里没有 ${COS_SUB_PATH}/_next/ 资源前缀，basePath 未生效，中止上传"
+            exit 1
+          fi
+
+      - name: Deploy to COS
+        uses: zkqiang/tencent-cos-action@v0.1.0
+        with:
+          args: upload -r ./out/ ${{ env.COS_SUB_PATH }}
+          secret_id: ${{ secrets.TENCENT_SECRET_ID }}
+          secret_key: ${{ secrets.TENCENT_SECRET_KEY }}
+          bucket: ${{ secrets.COS_BUCKET }}
+          region: ${{ secrets.COS_REGION }}

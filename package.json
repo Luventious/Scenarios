@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "build": "bash ./scripts/build.sh",
+    "build:static": "bash ./scripts/build-static.sh",
+    "scenes:snapshot": "tsx scripts/sync-scenes.ts",
     "dev": "bash ./scripts/dev.sh",
     "preinstall": "npx only-allow pnpm",
     "lint": "eslint --cache --cache-location node_modules/.cache/eslint/",

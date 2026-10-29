@@ -1,0 +1,556 @@
+{
+  "source": "builtin",
+  "radii": [
+    {
+      "key": "r1",
+      "name": "高频生活半径",
+      "subtitle": "丈量地理/空间的自由度",
+      "color": "#ECB073",
+      "gradient": [
+        [
+          0,
+          "#F1C9A1"
+        ],
+        [
+          0.62,
+          "#F1B786"
+        ],
+        [
+          0.75,
+          "#F1B98A"
+        ],
+        [
+          0.88,
+          "#EFAB7D"
+        ],
+        [
+          1,
+          "#ECB073"
+        ]
+      ],
+      "texture": {
+        "orient": "parallel",
+        "color": "rgba(220,150,80,0.08)",
+        "width": 2,
+        "period": 4
+      },
+      "description": "覆盖日常上下班、接送孩子、社区周边活动等最高频的规律性生活，是车辆作为「第三空间」属性最强的领域。"
+    },
+    {
+      "key": "r2",
+      "name": "都市探索半径",
+      "subtitle": "丈量地理/空间的自由度",
+      "color": "#C5C57F",
+      "gradient": [
+        [
+          0,
+          "#C5C57F"
+        ],
+        [
+          0.62,
+          "#85C194"
+        ],
+        [
+          1,
+          "#84C093"
+        ]
+      ],
+      "texture": {
+        "orient": "cross",
+        "color": "rgba(120,140,100,0.06)",
+        "width": 1.5,
+        "period": 3
+      },
+      "description": "城市内的兴趣探索与娱乐，如探店、看展等，也是彰显个性品味、拓展社交边界的场域。"
+    },
+    {
+      "key": "r3",
+      "name": "近郊短逃离半径",
+      "subtitle": "丈量地理/空间的自由度",
+      "color": "#6DB282",
+      "gradient": [
+        [
+          0,
+          "#82BF92"
+        ],
+        [
+          0.25,
+          "#6DB282"
+        ],
+        [
+          0.52,
+          "#93C180"
+        ],
+        [
+          1,
+          "#7AC0B7"
+        ]
+      ],
+      "texture": {
+        "orient": "parallel",
+        "color": "rgba(150,180,140,0.03)",
+        "width": 1,
+        "period": 2
+      },
+      "description": "周末微度假与短途旅行，是车辆作为「移动的家」，承载家庭欢乐与朋友欢聚。"
+    },
+    {
+      "key": "r4",
+      "name": "远方奔赴半径",
+      "subtitle": "丈量地理/空间的自由度",
+      "color": "#86B8CF",
+      "gradient": [
+        [
+          0,
+          "#85C3D4"
+        ],
+        [
+          0.49,
+          "#86B8CF"
+        ],
+        [
+          0.76,
+          "#C7C5C5"
+        ],
+        [
+          1,
+          "#8FBFD7"
+        ]
+      ],
+      "texture": {
+        "orient": "cross",
+        "color": "rgba(120,180,210,0.1)",
+        "width": 1,
+        "period": 2
+      },
+      "description": "跨城、跨省等长途自驾，是车辆作为「可靠伙伴」，实现深度旅行和情感连接的终极考验。"
+    }
+  ],
+  "relations": [
+    {
+      "key": "solo",
+      "name": "个人独处",
+      "description": "绝对的驾驶者个人空间，满足独处、疗愈、思考等纯粹的自我需求。"
+    },
+    {
+      "key": "intimate",
+      "name": "亲密关系",
+      "description": "车是近距离关系的专属空间，涉及亲密、娱乐、分享等需求。"
+    },
+    {
+      "key": "family",
+      "name": "家庭亲子",
+      "description": "以孩子为核心，兼顾安全、娱乐与照顾；三代家庭中，则需同时兼顾老人与儿童需求。"
+    },
+    {
+      "key": "pet",
+      "name": "人与宠物",
+      "description": "宠物也是重要的家庭成员，核心需要考虑宠物的安全、舒适和车内清洁。"
+    },
+    {
+      "key": "interest",
+      "name": "兴趣趣缘",
+      "description": "基于共同爱好或体验开展，既包括社圈绕等与车友相关的活动，如野餐、竞速等，也包含以车为媒、串联更广泛的兴趣圈层。"
+    },
+    {
+      "key": "business",
+      "name": "职场商务",
+      "description": "半公开的商务社交空间，注重体面、隐私与效率。"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "s01",
+      "name": "早餐飞奔啦",
+      "radius": "r1",
+      "relation": "solo",
+      "description": "一手方向盘一手早餐，通勤路上的快节奏早晨。"
+    },
+    {
+      "id": "s02",
+      "name": "打工人的自留地",
+      "radius": "r1",
+      "relation": "solo",
+      "description": "上下班通勤是只属于自己的片刻喘息。"
+    },
+    {
+      "id": "s03",
+      "name": "15min生活圈穿梭",
+      "radius": "r1",
+      "relation": "solo",
+      "description": "菜场、药店、快递站，社区生活的高频接驳。"
+    },
+    {
+      "id": "s04",
+      "name": "随行美容舱",
+      "radius": "r1",
+      "relation": "solo",
+      "description": "等红灯的间隙，补妆整理仪容的移动梳妆台。"
+    },
+    {
+      "id": "s05",
+      "name": "男主的自我时间",
+      "radius": "r1",
+      "relation": "solo",
+      "description": "到家后在车里独坐的十分钟，只属于自己。"
+    },
+    {
+      "id": "s06",
+      "name": "移动的会地",
+      "radius": "r1",
+      "relation": "solo",
+      "description": "车内成为临时办公与思考的安静角落。"
+    },
+    {
+      "id": "s07",
+      "name": "你一杯我一杯",
+      "radius": "r1",
+      "relation": "solo",
+      "description": "杯架上的咖啡与奶茶，陪跑每一段日常路途。"
+    },
+    {
+      "id": "s08",
+      "name": "爱的专属音",
+      "radius": "r1",
+      "relation": "solo",
+      "description": "私人歌单环绕，车厢是一个人的 Livehouse。"
+    },
+    {
+      "id": "s09",
+      "name": "都市入夜游",
+      "radius": "r2",
+      "relation": "solo",
+      "description": "深夜开车穿过霓虹，独享城市的另一面。"
+    },
+    {
+      "id": "s10",
+      "name": "车技时刻炫耀",
+      "radius": "r2",
+      "relation": "solo",
+      "description": "一把入库、窄路掉头，享受驾控的高光时刻。"
+    },
+    {
+      "id": "s11",
+      "name": "「副驾不」坐人",
+      "radius": "r2",
+      "relation": "solo",
+      "description": "副驾留给背包与心情，一个人说走就走。"
+    },
+    {
+      "id": "s12",
+      "name": "摄影采风车",
+      "radius": "r3",
+      "relation": "solo",
+      "description": "追光逐影，把车开到最佳机位旁。"
+    },
+    {
+      "id": "s13",
+      "name": "移动冥想舱",
+      "radius": "r3",
+      "relation": "solo",
+      "description": "停在山水之间，在车厢里静心疗愈。"
+    },
+    {
+      "id": "s14",
+      "name": "「单骑」闯天涯",
+      "radius": "r4",
+      "relation": "solo",
+      "description": "一个人一辆车，长途自驾丈量世界。"
+    },
+    {
+      "id": "s15",
+      "name": "接送间隙的默契",
+      "radius": "r1",
+      "relation": "intimate",
+      "description": "接送孩子或伴侣的间隙，车厢里的独处陪伴与默契。"
+    },
+    {
+      "id": "s16",
+      "name": "约会后的启动时刻",
+      "radius": "r1",
+      "relation": "intimate",
+      "description": "约会结束上车，余味在车厢里延续。"
+    },
+    {
+      "id": "s17",
+      "name": "爱车暖守不担心",
+      "radius": "r1",
+      "relation": "intimate",
+      "description": "冬夜热车等待，把温暖留给上车的人。"
+    },
+    {
+      "id": "s18",
+      "name": "秒变夏观现场",
+      "radius": "r2",
+      "relation": "intimate",
+      "description": "天窗就是银幕，两个人的夏夜观星场。"
+    },
+    {
+      "id": "s19",
+      "name": "城市宝藏探店",
+      "radius": "r2",
+      "relation": "intimate",
+      "description": "轮流报地名，一起打卡城市角落的小店。"
+    },
+    {
+      "id": "s20",
+      "name": "迷你公路行",
+      "radius": "r3",
+      "relation": "intimate",
+      "description": "周末短途兜风，两个人的公路片。"
+    },
+    {
+      "id": "s21",
+      "name": "野地茶话会",
+      "radius": "r3",
+      "relation": "intimate",
+      "description": "车尾箱摆出茶具，在郊外聊一整个下午。"
+    },
+    {
+      "id": "s22",
+      "name": "携手逃离城市",
+      "radius": "r3",
+      "relation": "intimate",
+      "description": "周五傍晚出发，把城市抛在身后。"
+    },
+    {
+      "id": "s23",
+      "name": "自在跨城游",
+      "radius": "r4",
+      "relation": "intimate",
+      "description": "长途旅行中轮换驾驶，默契随里程增长。"
+    },
+    {
+      "id": "s24",
+      "name": "地标打卡最优解",
+      "radius": "r4",
+      "relation": "intimate",
+      "description": "自驾抵达每一个远方地标合影留念。"
+    },
+    {
+      "id": "s25",
+      "name": "行车轨迹分享",
+      "radius": "r4",
+      "relation": "intimate",
+      "description": "把一路轨迹与风景实时分享给对方。"
+    },
+    {
+      "id": "s26",
+      "name": "车内巧育婴",
+      "radius": "r1",
+      "relation": "family",
+      "description": "奶瓶、安抚玩具齐备，车内是移动育婴室。"
+    },
+    {
+      "id": "s27",
+      "name": "爸爸安心带娃",
+      "radius": "r1",
+      "relation": "family",
+      "description": "儿童锁与后视镜里的视线，独自带娃也从容。"
+    },
+    {
+      "id": "s28",
+      "name": "去接幼儿园",
+      "radius": "r1",
+      "relation": "family",
+      "description": "校门口的等待，是每天固定的亲子时刻。"
+    },
+    {
+      "id": "s29",
+      "name": "家庭采购日",
+      "radius": "r1",
+      "relation": "family",
+      "description": "周末超市大采购，后备箱装下全家所需。"
+    },
+    {
+      "id": "s30",
+      "name": "一日乐园挑战",
+      "radius": "r2",
+      "relation": "family",
+      "description": "开车往返主题乐园，一天刷遍孩子的梦想。"
+    },
+    {
+      "id": "s31",
+      "name": "亲子轻露营",
+      "radius": "r2",
+      "relation": "family",
+      "description": "城市边缘的草坪露营，装下帐篷与笑声。"
+    },
+    {
+      "id": "s32",
+      "name": "农场采摘车",
+      "radius": "r3",
+      "relation": "family",
+      "description": "周末农场采摘，后备箱满载应季果实。"
+    },
+    {
+      "id": "s33",
+      "name": "小天文学家观星夜",
+      "radius": "r3",
+      "relation": "family",
+      "description": "开车到郊外暗夜，带孩子看银河。"
+    },
+    {
+      "id": "s34",
+      "name": "春节团圆号",
+      "radius": "r4",
+      "relation": "family",
+      "description": "长途返乡，满载年货与一整年的思念。"
+    },
+    {
+      "id": "s35",
+      "name": "全家房车游",
+      "radius": "r4",
+      "relation": "family",
+      "description": "三代同行，吃住都在车上的家庭远征。"
+    },
+    {
+      "id": "s36",
+      "name": "「爸妈心意」前备箱",
+      "radius": "r4",
+      "relation": "family",
+      "description": "返程时被父母塞满的前备箱，全是家的味道。"
+    },
+    {
+      "id": "s37",
+      "name": "带宠物去兜风",
+      "radius": "r1",
+      "relation": "pet",
+      "description": "狗狗把头探出车窗，日常兜风的小确幸。"
+    },
+    {
+      "id": "s38",
+      "name": "草坪撒欢日",
+      "radius": "r2",
+      "relation": "pet",
+      "description": "开车带宠物去城市草坪奔跑社交。"
+    },
+    {
+      "id": "s39",
+      "name": "一人一狗治愈旅行",
+      "radius": "r3",
+      "relation": "pet",
+      "description": "带着爱犬短途旅行，互相陪伴的治愈之旅。"
+    },
+    {
+      "id": "s40",
+      "name": "带我戏水撒欢",
+      "radius": "r3",
+      "relation": "pet",
+      "description": "自驾到溪边浅滩，陪宠物玩水消暑。"
+    },
+    {
+      "id": "s41",
+      "name": "萌宠长途无忧",
+      "radius": "r4",
+      "relation": "pet",
+      "description": "长途出行的宠物安全座椅与防护装备齐备。"
+    },
+    {
+      "id": "s42",
+      "name": "特需好物关怀座",
+      "radius": "r1",
+      "relation": "interest",
+      "description": "为同好准备的装备位，随时奔赴兴趣现场。"
+    },
+    {
+      "id": "s43",
+      "name": "晨跑去爬山",
+      "radius": "r2",
+      "relation": "interest",
+      "description": "清晨开车到山脚，和跑友约一场山径。"
+    },
+    {
+      "id": "s44",
+      "name": "周末撒「野」局",
+      "radius": "r2",
+      "relation": "interest",
+      "description": "车友组队轻度越野，周末一起去野。"
+    },
+    {
+      "id": "s45",
+      "name": "后备箱社交",
+      "radius": "r2",
+      "relation": "interest",
+      "description": "打开尾箱就是摊位，车友市集式社交。"
+    },
+    {
+      "id": "s46",
+      "name": "后排炫技屋",
+      "radius": "r2",
+      "relation": "interest",
+      "description": "在后排展示装备与手办，同好间的炫耀时刻。"
+    },
+    {
+      "id": "s47",
+      "name": "近郊「4+2」行",
+      "radius": "r3",
+      "relation": "interest",
+      "description": "四轮加两轮，车架载着自行车去郊外骑行。"
+    },
+    {
+      "id": "s48",
+      "name": "合法炫技的快乐",
+      "radius": "r3",
+      "relation": "interest",
+      "description": "在赛道日合规驰骋，释放驾控热情。"
+    },
+    {
+      "id": "s49",
+      "name": "去没有路的地方",
+      "radius": "r4",
+      "relation": "interest",
+      "description": "越野穿越无人之境，挑战极限地形。"
+    },
+    {
+      "id": "s50",
+      "name": "向高处进发",
+      "radius": "r4",
+      "relation": "interest",
+      "description": "自驾高原山地，奔赴海拔新高。"
+    },
+    {
+      "id": "s51",
+      "name": "追开车边航拍",
+      "radius": "r4",
+      "relation": "interest",
+      "description": "无人机伴飞，记录长途自驾的壮阔视角。"
+    },
+    {
+      "id": "s52",
+      "name": "一起去运动",
+      "radius": "r1",
+      "relation": "business",
+      "description": "接送客户或同事赴约运动局，商务社交新场景。"
+    },
+    {
+      "id": "s53",
+      "name": "二次元堵车巡游",
+      "radius": "r2",
+      "relation": "business",
+      "description": "痛车文化与品牌巡游，商务展示的移动橱窗。"
+    },
+    {
+      "id": "s54",
+      "name": "从客变商务社交",
+      "radius": "r3",
+      "relation": "business",
+      "description": "短途接送途中，客户关系悄然升温。"
+    },
+    {
+      "id": "s55",
+      "name": "体面人的更衣室",
+      "radius": "r3",
+      "relation": "business",
+      "description": "车内更换正装，商务场合前后的体面缓冲。"
+    },
+    {
+      "id": "s56",
+      "name": "老板的秘密头等舱",
+      "radius": "r4",
+      "relation": "business",
+      "description": "后排隐私屏与商务配置，移动的总裁办公室。"
+    }
+  ],
+  "fetchedAt": "2026-10-29T14:15:42.428Z"
+}

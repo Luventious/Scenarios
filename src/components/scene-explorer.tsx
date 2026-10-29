@@ -15,6 +15,8 @@ import RadialChart from "@/components/radial-chart";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
+import { loadSceneDataset } from "@/lib/scenes-client";
+import type { SceneDatasetOrigin } from "@/lib/scenes-client";
 import { cn } from "@/lib/utils";
 import type {
   GradientStop,
@@ -41,6 +43,26 @@ function toggleInSet<T>(set: Set<T>, value: T): Set<T> {
   if (next.has(value)) next.delete(value);
   else next.add(value);
   return next;
+}
+
+/** 数据源徽章文案：区分「实时接口 / 构建快照 / 前端兑底」三种命中方式 */
+function datasetBadge(
+  source: SceneDataset["source"],
+  origin: SceneDatasetOrigin | null,
+): string {
+  if (source !== "feishu") return "内置场景集";
+  return origin === "snapshot" ? "飞书快照" : "飞书多维表格";
+}
+
+function datasetLabel(
+  source: SceneDataset["source"],
+  origin: SceneDatasetOrigin | null,
+): string {
+  if (source !== "feishu") return "数据来自内置场景集";
+  if (origin === "snapshot") {
+    return "数据来自构建期导出的飞书快照（静态托管模式，改表后需重新发布）";
+  }
+  return "数据来自飞书多维表格（实时读取）";
 }
 
 /** 图例色带：竖向渐变，方向与「内圈→外沿」一致 */
@@ -188,6 +210,7 @@ function RadiusLegend({
 
 export default function SceneExplorer() {
   const [dataset, setDataset] = useState<SceneDataset | null>(null);
+  const [origin, setOrigin] = useState<SceneDatasetOrigin | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const [query, setQuery] = useState("");
@@ -203,28 +226,19 @@ export default function SceneExplorer() {
   const [resetTick, setResetTick] = useState(0);
 
   useEffect(() => {
-    let aborted = false;
-    fetch("/api/scenes")
-      .then(async (resp) => {
-        const body = (await resp.json()) as SceneDataset & {
-          error?: string;
-          message?: string;
-        };
-        if (!resp.ok) {
-          throw new Error(body.message ?? "场景数据加载失败");
-        }
-        if (!aborted) {
-          setDataset(body);
-          setError(null);
-        }
+    const controller = new AbortController();
+    loadSceneDataset(controller.signal)
+      .then(({ dataset: next, origin }) => {
+        setOrigin(origin);
+        setDataset(next);
+        setError(null);
       })
       .catch((err: unknown) => {
-        if (!aborted) {
-          setError(err instanceof Error ? err.message : "数据加载失败");
-        }
+        if (controller.signal.aborted) return;
+        setError(err instanceof Error ? err.message : "数据加载失败");
       });
     return () => {
-      aborted = true;
+      controller.abort();
     };
   }, []);
 
@@ -354,9 +368,7 @@ export default function SceneExplorer() {
                 error
                   ? error
                   : dataset
-                    ? dataset.source === "feishu"
-                      ? "数据来自飞书多维表格"
-                      : "数据来自内置场景集"
+                    ? datasetLabel(dataset.source, origin)
                     : "正在读取数据"
               }
             >
@@ -364,9 +376,7 @@ export default function SceneExplorer() {
               {error
                 ? "读取失败"
                 : dataset
-                  ? dataset.source === "feishu"
-                    ? "飞书多维表格"
-                    : "内置场景集"
+                  ? datasetBadge(dataset.source, origin)
                   : "连接中" }
             </span>
           </div>
