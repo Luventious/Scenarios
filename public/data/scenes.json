@@ -1,5 +1,5 @@
 {
-  "source": "builtin",
+  "source": "feishu",
   "radii": [
     {
       "key": "r1",
@@ -160,397 +160,527 @@
   ],
   "scenes": [
     {
-      "id": "s01",
-      "name": "早餐飞奔啦",
+      "id": "rec28eTlypjsa8",
+      "name": "早高峰飞驰",
       "radius": "r1",
       "relation": "solo",
-      "description": "一手方向盘一手早餐，通勤路上的快节奏早晨。"
+      "description": "当前任务输入为空，缺少引用文本数据以及前几列的标签信息，无法据此输出对应的场景释义。请补充完整的任务输入数据后重新提交，以便我根据前几列标签准确生成场景释义。",
+      "weight": 2,
+      "weightLabel": "中"
     },
     {
-      "id": "s02",
+      "id": "rec28eTlypjvhv",
       "name": "打工人的自留地",
       "radius": "r1",
       "relation": "solo",
-      "description": "上下班通勤是只属于自己的片刻喘息。"
+      "description": "任务输入为空，未提供任何标签数据，因此无法根据前几列标签输出场景释义。\n\n请补充完整的任务输入数据（即包含前几列标签的表格或文本内容），我将根据标签信息为您输出对应的场景释义。",
+      "weight": 3,
+      "weightLabel": "高"
     },
     {
-      "id": "s03",
+      "id": "rec28eTlypjvJJ",
       "name": "15min生活圈穿梭",
       "radius": "r1",
       "relation": "solo",
-      "description": "菜场、药店、快递站，社区生活的高频接驳。"
+      "description": "任务输入为空，未提供任何引用文本数据或前几列的标签内容，因此无法据此输出场景释义。\n\n请补充完整的任务输入数据，包括前几列的标签信息，我才能根据任务要求为您生成对应场景的释义。",
+      "weight": 1,
+      "weightLabel": "低"
     },
     {
-      "id": "s04",
+      "id": "rec28eTlypjw77",
       "name": "随行美容舱",
       "radius": "r1",
       "relation": "solo",
-      "description": "等红灯的间隙，补妆整理仪容的移动梳妆台。"
+      "description": "任务输入为空，无法执行任务。\n\n当前的任务输入部分未提供任何引用文本数据（无标签列信息），因此无法根据“前几列标签”输出对应的场景释义。\n\n请补充完整的任务输入数据（包含标签列的场景数据表或文本），我将根据标签内容为您输出相应的场景释义。",
+      "weight": 2,
+      "weightLabel": "中"
     },
     {
-      "id": "s05",
+      "id": "rec28eTlypjwv9",
       "name": "男主的自我时间",
       "radius": "r1",
       "relation": "solo",
-      "description": "到家后在车里独坐的十分钟，只属于自己。"
+      "description": "任务输入为空，未提供任何标签数据或引用文本，无法根据前几列标签输出场景释义。请补充完整的任务输入数据后再执行该任务。",
+      "weight": 2,
+      "weightLabel": "中"
     },
     {
-      "id": "s06",
-      "name": "移动的会地",
-      "radius": "r1",
-      "relation": "solo",
-      "description": "车内成为临时办公与思考的安静角落。"
-    },
-    {
-      "id": "s07",
-      "name": "你一杯我一杯",
-      "radius": "r1",
-      "relation": "solo",
-      "description": "杯架上的咖啡与奶茶，陪跑每一段日常路途。"
-    },
-    {
-      "id": "s08",
-      "name": "爱的专属音",
-      "radius": "r1",
-      "relation": "solo",
-      "description": "私人歌单环绕，车厢是一个人的 Livehouse。"
-    },
-    {
-      "id": "s09",
+      "id": "recvw1Cy5Q4lE4",
       "name": "都市入夜游",
       "radius": "r2",
       "relation": "solo",
-      "description": "深夜开车穿过霓虹，独享城市的另一面。"
+      "description": "任务输入为空，未提供任何引用文本数据或前几列标签信息，因此无法据此生成对应的场景释义。\n\n请补充完整的任务输入数据（如标签列内容），以便我根据前几列标签准确输出场景释义。",
+      "weight": 2,
+      "weightLabel": "中"
     },
     {
-      "id": "s10",
+      "id": "recvw63vZgsqsp",
       "name": "车技时刻炫耀",
       "radius": "r2",
       "relation": "solo",
-      "description": "一把入库、窄路掉头，享受驾控的高光时刻。"
+      "description": "任务输入为空，未提供任何前几列的标签数据，因此无法据此生成场景释义。\n\n请补充完整的任务输入（包括相关标签列信息）后，我将根据标签内容为您输出对应的场景释义。",
+      "weight": 3,
+      "weightLabel": "高"
     },
     {
-      "id": "s11",
-      "name": "「副驾不」坐人",
-      "radius": "r2",
-      "relation": "solo",
-      "description": "副驾留给背包与心情，一个人说走就走。"
-    },
-    {
-      "id": "s12",
+      "id": "recvw63vZgneoL",
       "name": "摄影采风车",
       "radius": "r3",
       "relation": "solo",
-      "description": "追光逐影，把车开到最佳机位旁。"
+      "description": "任务输入为空，未提供任何标签列数据，因此无法根据前几列标签生成对应的场景释义。\n\n请补充完整的任务输入数据（即包含标签列的引用文本数据），我将根据任务要求为您输出相应的场景释义。",
+      "weight": 2,
+      "weightLabel": "中"
     },
     {
-      "id": "s13",
+      "id": "recvw63vZggL5k",
       "name": "移动冥想舱",
       "radius": "r3",
       "relation": "solo",
-      "description": "停在山水之间，在车厢里静心疗愈。"
+      "description": "任务输入部分为空，未提供任何标签数据。\n\n根据任务要求“根据前几列标签，输出场景释义”，我需要看到前几列的具体标签内容（例如场景类别、行为类型、时间、地点等标签信息）才能推断并输出对应的场景释义。\n\n由于当前输入为空，无法执行该任务。请补充完整的任务输入数据（包含前几列标签的表格或文本数据），我将根据标签内容为您输出相应的场景释义。",
+      "weight": 2,
+      "weightLabel": "中"
     },
     {
-      "id": "s14",
+      "id": "recvw63vZgLUTV",
       "name": "「单骑」闯天涯",
       "radius": "r4",
       "relation": "solo",
-      "description": "一个人一辆车，长途自驾丈量世界。"
+      "description": "任务输入为空，未提供任何引用文本数据或标签列信息，因此无法根据前几列标签生成对应的场景释义。\n\n请补充完整的任务输入数据（包含标签列的文本或表格内容），我将依据标签内容严谨地输出相应的场景释义。",
+      "weight": 2,
+      "weightLabel": "中"
     },
     {
-      "id": "s15",
-      "name": "接送间隙的默契",
+      "id": "recvw63vZgs7Xa",
+      "name": "行车轨迹分享",
+      "radius": "r4",
+      "relation": "solo",
+      "description": "由于任务输入为空，未提供任何标签数据或引用文本，因此无法根据前几列标签输出对应的场景释义。请补充完整的任务输入数据（包含标签列的文本数据）后，再执行该任务。",
+      "weight": 2,
+      "weightLabel": "中"
+    },
+    {
+      "id": "recvw63vZgC5UY",
+      "name": "「爸妈心累」前备箱",
+      "radius": "r4",
+      "relation": "solo",
+      "description": "任务输入为空，未提供任何前几列标签数据，因此无法据此生成对应的场景释义。请补充完整的标签列数据后再执行该任务。",
+      "weight": 1,
+      "weightLabel": "低"
+    },
+    {
+      "id": "recvw63vZghSji",
+      "name": "大自然的车身留痕",
+      "radius": "r4",
+      "relation": "solo",
+      "description": "当前任务输入为空，未提供任何标签数据或引用文本，因此无法根据“前几列标签”输出对应的场景释义。\n\n请补充任务输入数据（例如包含标签列的表格数据或文本），以便我按照任务要求完成场景释义的输出。",
+      "weight": 1,
+      "weightLabel": "低"
+    },
+    {
+      "id": "recvw63vZgrOh2",
+      "name": "移动的会地",
       "radius": "r1",
       "relation": "intimate",
-      "description": "接送孩子或伴侣的间隙，车厢里的独处陪伴与默契。"
+      "description": "任务输入部分为空，未提供任何引用文本数据（即缺少包含标签的前几列数据），因此无法根据标签输出对应的场景释义。\n\n请提供完整的任务输入数据（如标签列内容），我将严格按照任务要求，基于前几列标签输出场景释义（单选输出不带括号和引号）。",
+      "weight": 3,
+      "weightLabel": "高"
     },
     {
-      "id": "s16",
-      "name": "约会后的启动时刻",
+      "id": "recvw63vZgJCgm",
+      "name": "你一杯我一杯",
       "radius": "r1",
       "relation": "intimate",
-      "description": "约会结束上车，余味在车厢里延续。"
+      "description": "当前任务输入为空，缺少需要处理的引用文本数据（前几列标签），因此无法输出对应的场景释义。\n\n请您补充任务输入数据。收到数据后，我将按照以下方式处理：\n\n**处理方式说明：**\n1. 读取输入数据中的前几列标签信息\n2. 综合分析各标签的含义及其关联性\n3. 推断并输出这些标签共同指向的场景释义\n4. 输出内容将严格遵守注意事项要求，不包含括号和引号\n\n**示例格式（假设输入标签为：厨房、油烟、晚餐）：**\n对应场景可能为：家庭日常烹饪场景\n\n请提供完整的任务输入数据，我将立即为您处理。",
+      "weight": 2,
+      "weightLabel": "中"
     },
     {
-      "id": "s17",
-      "name": "爱车暖守不担心",
+      "id": "recvw63vZgYluI",
+      "name": "爱的专属音",
       "radius": "r1",
       "relation": "intimate",
-      "description": "冬夜热车等待，把温暖留给上车的人。"
+      "description": "任务输入部分为空，未提供任何标签数据或引用文本，因此无法根据“前几列标签”生成对应的场景释义。\n\n请您补充完整的任务输入数据（即包含标签列的文本数据），我将根据任务要求为您输出相应的场景释义。",
+      "weight": 2,
+      "weightLabel": "中"
     },
     {
-      "id": "s18",
-      "name": "秒变夏观现场",
+      "id": "recvw63vZgjWnj",
+      "name": "秒变真爱现场",
       "radius": "r2",
       "relation": "intimate",
-      "description": "天窗就是银幕，两个人的夏夜观星场。"
+      "description": "任务输入为空，未提供任何标签数据或引用文本，因此无法根据“前几列标签”输出对应的场景释义。\n\n请补充完整的任务输入数据（如包含标签列的表格或文本内容），我将根据所提供的标签为您生成相应的场景释义。",
+      "weight": 1,
+      "weightLabel": "低"
     },
     {
-      "id": "s19",
+      "id": "recvw63vZg9fTJ",
       "name": "城市宝藏探店",
       "radius": "r2",
       "relation": "intimate",
-      "description": "轮流报地名，一起打卡城市角落的小店。"
+      "description": "任务输入为空，无法根据“前几列标签”输出对应的场景释义。\n\n请提供包含标签数据的引用文本（例如表格或分列的标签内容），我才能按照任务要求完成场景释义的输出。",
+      "weight": 2,
+      "weightLabel": "中"
     },
     {
-      "id": "s20",
+      "id": "recvw63vZgi97C",
+      "name": "「副驾不'坐'人」",
+      "radius": "r3",
+      "relation": "solo",
+      "description": "任务输入为空，未提供前几列标签数据，因此无法输出对应的场景释义。请补充完整的标签数据后再执行该任务。",
+      "weight": 2,
+      "weightLabel": "中"
+    },
+    {
+      "id": "recvw63vZgaCEd",
       "name": "迷你公路行",
       "radius": "r3",
       "relation": "intimate",
-      "description": "周末短途兜风，两个人的公路片。"
+      "description": "任务输入为空，未提供任何标签数据或引用文本，因此无法根据前几列标签生成场景释义。\n\n请补充完整的任务输入数据（包含标签列及相关文本信息），我将按照任务要求为您输出对应的场景释义。",
+      "weight": 2,
+      "weightLabel": "中"
     },
     {
-      "id": "s21",
+      "id": "recvw63vZgGfCe",
       "name": "野地茶话会",
       "radius": "r3",
       "relation": "intimate",
-      "description": "车尾箱摆出茶具，在郊外聊一整个下午。"
+      "description": "任务输入为空，未提供任何标签数据或引用文本，因此无法根据前几列标签输出场景释义。请补充完整的任务输入数据后再执行该任务。",
+      "weight": 1,
+      "weightLabel": "低"
     },
     {
-      "id": "s22",
+      "id": "recvw63vZgu4NA",
       "name": "携手逃离城市",
-      "radius": "r3",
-      "relation": "intimate",
-      "description": "周五傍晚出发，把城市抛在身后。"
-    },
-    {
-      "id": "s23",
-      "name": "自在跨城游",
       "radius": "r4",
       "relation": "intimate",
-      "description": "长途旅行中轮换驾驶，默契随里程增长。"
+      "description": "任务输入部分为空，未提供任何标签数据或引用文本，因此无法根据“前几列标签”输出对应的场景释义。\n\n请您补充完整的任务输入数据（例如包含标签列的数据表格或文本内容），我将根据任务要求为您输出相应的场景释义。\n\n**补充说明：**\n- 若数据为表格形式，请提供包含各列标签的完整行数据；\n- 收到数据后，我会严格遵循注意事项，输出内容不带括号和引号。",
+      "weight": 2,
+      "weightLabel": "中"
     },
     {
-      "id": "s24",
+      "id": "recvw63vZg3fyW",
+      "name": "自在跨境游",
+      "radius": "r4",
+      "relation": "intimate",
+      "description": "任务输入为空，未提供任何引用文本数据或标签列信息，因此无法根据前几列标签生成场景释义。请补充完整的任务输入数据后再执行此任务。",
+      "weight": 2,
+      "weightLabel": "中"
+    },
+    {
+      "id": "recvw63vZgg7JA",
       "name": "地标打卡最优解",
       "radius": "r4",
       "relation": "intimate",
-      "description": "自驾抵达每一个远方地标合影留念。"
+      "description": "任务输入为空，未提供任何引用文本或前几列标签数据，因此无法据此输出场景释义。\n\n作为一个严谨的文字信息处理助手，我不能在缺少必要输入数据的情况下凭空生成答案。请您补充完整的任务输入（包含前几列标签数据），我将根据标签内容为您输出对应的场景释义。",
+      "weight": 2,
+      "weightLabel": "中"
     },
     {
-      "id": "s25",
-      "name": "行车轨迹分享",
-      "radius": "r4",
-      "relation": "intimate",
-      "description": "把一路轨迹与风景实时分享给对方。"
+      "id": "recvw63vZg7tfL",
+      "name": "接娃上下学",
+      "radius": "r1",
+      "relation": "family",
+      "description": "任务输入为空，未提供任何标签数据或引用文本，因此无法根据“前几列标签”生成对应的场景释义。\n\n请补充完整的任务输入数据（例如包含标签列的表格或文本），我将根据所提供的标签内容，严谨地输出对应的场景释义。",
+      "weight": 1,
+      "weightLabel": "低"
     },
     {
-      "id": "s26",
+      "id": "recvw63vZgAu4g",
+      "name": "车内学习室",
+      "radius": "r1",
+      "relation": "family",
+      "description": "任务输入为空，未提供任何引用文本数据或前几列标签，因此无法据此生成对应的场景释义。请补充完整的输入数据后，我再根据任务要求进行解答。",
+      "weight": 3,
+      "weightLabel": "高"
+    },
+    {
+      "id": "recvw63vZgYd63",
       "name": "车内巧育婴",
       "radius": "r1",
       "relation": "family",
-      "description": "奶瓶、安抚玩具齐备，车内是移动育婴室。"
+      "description": "任务输入为空，未提供任何引用文本数据或标签信息，因此无法根据“前几列标签”输出对应的场景释义。\n\n请提供包含标签列的具体数据（例如：标签名称、场景分类等列内容），我才能据此完成场景释义的输出任务。",
+      "weight": 1,
+      "weightLabel": "低"
     },
     {
-      "id": "s27",
-      "name": "爸爸安心带娃",
+      "id": "recvw63vZgWToa",
+      "name": "老爸安心带娃",
       "radius": "r1",
       "relation": "family",
-      "description": "儿童锁与后视镜里的视线，独自带娃也从容。"
+      "description": "由于任务输入部分为空，未提供任何标签数据或引用文本，我无法根据“前几列标签”输出对应的场景释义。\n\n请您补充完整的任务输入数据（即包含标签列的数据内容），我将严格按照任务要求为您输出场景释义。",
+      "weight": 1,
+      "weightLabel": "低"
     },
     {
-      "id": "s28",
-      "name": "去接幼儿园",
-      "radius": "r1",
-      "relation": "family",
-      "description": "校门口的等待，是每天固定的亲子时刻。"
-    },
-    {
-      "id": "s29",
+      "id": "recvw63vZg8nQU",
       "name": "家庭采购日",
-      "radius": "r1",
+      "radius": "r2",
       "relation": "family",
-      "description": "周末超市大采购，后备箱装下全家所需。"
+      "description": "任务输入部分为空，未提供任何引用文本数据或前几列的标签信息，因此无法据此判断并输出对应的场景释义。\n\n请您补充完整的任务输入数据（包含前几列标签的表格或文本内容），我将根据标签信息为您输出准确的场景释义。",
+      "weight": 2,
+      "weightLabel": "中"
     },
     {
-      "id": "s30",
+      "id": "recvw63vZgzLbh",
       "name": "一日乐园挑战",
       "radius": "r2",
       "relation": "family",
-      "description": "开车往返主题乐园，一天刷遍孩子的梦想。"
+      "description": "任务输入为空，未提供任何标签或引用文本数据，因此无法根据前几列标签生成场景释义。请补充完整的任务输入数据后再执行本任务。",
+      "weight": 2,
+      "weightLabel": "中"
     },
     {
-      "id": "s31",
+      "id": "recvw63vZgHOyj",
       "name": "亲子轻露营",
-      "radius": "r2",
+      "radius": "r3",
       "relation": "family",
-      "description": "城市边缘的草坪露营，装下帐篷与笑声。"
+      "description": "任务输入为空，缺少需要处理的引用文本数据和前几列标签信息，无法据此输出场景释义。\n\n请补充完整的任务输入数据（包括前几列的标签内容），以便我根据标签准确输出对应的场景释义。",
+      "weight": 2,
+      "weightLabel": "中"
     },
     {
-      "id": "s32",
+      "id": "recvw63vZgEAEu",
       "name": "农场采摘车",
       "radius": "r3",
       "relation": "family",
-      "description": "周末农场采摘，后备箱满载应季果实。"
+      "description": "任务输入为空，无法执行该任务。\n\n**原因说明：**\n任务要求“根据前几列标签，输出场景释义”，但当前“任务输入”部分未提供任何标签数据（列标签内容缺失）。缺少必要的前置标签信息，无法推断或生成对应的场景释义。\n\n**建议：**\n请补充完整的任务输入数据（即各列标签内容），例如：\n- 场景类别标签（如：办公、出行、家居等）\n- 相关属性标签（如：时间、地点、人物等）\n\n待输入数据补齐后，我将依据前几列标签，输出准确的场景释义，并遵循注意事项要求（不带括号和引号）。",
+      "weight": 2,
+      "weightLabel": "中"
     },
     {
-      "id": "s33",
+      "id": "recvw63vZgFUEn",
       "name": "小天文学家观星夜",
       "radius": "r3",
       "relation": "family",
-      "description": "开车到郊外暗夜，带孩子看银河。"
+      "description": "任务输入为空，未提供任何引用文本数据或前几列标签信息，因此无法生成对应的场景释义。\n\n请补充完整的任务输入数据（即包含前几列标签的文本数据），我将根据标签内容输出相应的场景释义。",
+      "weight": 2,
+      "weightLabel": "中"
     },
     {
-      "id": "s34",
+      "id": "recvw63vZgjAjf",
       "name": "春节团圆号",
       "radius": "r4",
       "relation": "family",
-      "description": "长途返乡，满载年货与一整年的思念。"
+      "description": "任务输入为空，未提供任何标签数据或引用文本，因此无法根据“前几列标签”输出对应的场景释义。\n\n请补充完整的任务输入数据（即包含标签列的表格或文本内容），我将在收到数据后严格按照任务要求为您输出场景释义。",
+      "weight": 2,
+      "weightLabel": "中"
     },
     {
-      "id": "s35",
+      "id": "recvw63vZgEOrM",
       "name": "全家房车游",
       "radius": "r4",
       "relation": "family",
-      "description": "三代同行，吃住都在车上的家庭远征。"
+      "description": "任务输入为空，未提供任何前几列标签数据，因此无法根据标签输出对应的场景释义。\n\n请补充完整的任务输入数据（包含前几列标签信息），我将根据标签内容为您输出相应的场景释义。",
+      "weight": 2,
+      "weightLabel": "中"
     },
     {
-      "id": "s36",
-      "name": "「爸妈心意」前备箱",
-      "radius": "r4",
-      "relation": "family",
-      "description": "返程时被父母塞满的前备箱，全是家的味道。"
-    },
-    {
-      "id": "s37",
-      "name": "带宠物去兜风",
+      "id": "recvw63vZgZmc4",
+      "name": "爱宠留守不担心",
       "radius": "r1",
       "relation": "pet",
-      "description": "狗狗把头探出车窗，日常兜风的小确幸。"
+      "description": "任务输入为空，未提供任何引用文本数据或标签列信息，无法根据前几列标签输出对应的场景释义。\n\n请提供包含标签列的完整数据（如场景标签、分类标签等），我才能据此生成准确的场景释义。",
+      "weight": 2,
+      "weightLabel": "中"
     },
     {
-      "id": "s38",
+      "id": "recvw63vZgrmiy",
+      "name": "流浪猫的启助时刻",
+      "radius": "r1",
+      "relation": "pet",
+      "description": "任务输入数据为空，未提供任何标签列数据，因此无法据此输出场景释义。\n\n请补充完整的任务输入（包含前几列标签信息）后，我将根据标签内容为您输出对应的场景释义。",
+      "weight": 1,
+      "weightLabel": "低"
+    },
+    {
+      "id": "recvw63vZgRYlm",
+      "name": "特需宠物关怀专座",
+      "radius": "r2",
+      "relation": "pet",
+      "description": "任务输入为空。\n\n由于任务输入中未提供任何引用文本数据或前几列的标签信息，无法据此判断并输出对应的场景释义。\n\n请补充完整的任务输入数据（即包含前几列标签的文本内容），我将根据标签信息为您输出相应的场景释义。",
+      "weight": 1,
+      "weightLabel": "低"
+    },
+    {
+      "id": "recvw63vZgVVVM",
       "name": "草坪撒欢日",
       "radius": "r2",
       "relation": "pet",
-      "description": "开车带宠物去城市草坪奔跑社交。"
+      "description": "任务输入为空，未提供任何引用文本数据或前几列的标签信息，因此无法根据标签输出对应的场景释义。\n\n请补充任务输入（即前几列的标签数据），以便我根据标签内容为您输出准确的场景释义。",
+      "weight": 1,
+      "weightLabel": "低"
     },
     {
-      "id": "s39",
+      "id": "recvw63vZgzryy",
       "name": "一人一狗治愈旅行",
       "radius": "r3",
       "relation": "pet",
-      "description": "带着爱犬短途旅行，互相陪伴的治愈之旅。"
+      "description": "任务输入为空，未提供任何标签数据，无法根据前几列标签生成对应的场景释义。\n\n请补充任务输入数据（即包含标签列的引用文本），我将根据标签内容为您输出相应的场景释义。",
+      "weight": 1,
+      "weightLabel": "低"
     },
     {
-      "id": "s40",
-      "name": "带我戏水撒欢",
+      "id": "recvw63vZg4rb4",
+      "name": "萌宠水边撒欢",
       "radius": "r3",
       "relation": "pet",
-      "description": "自驾到溪边浅滩，陪宠物玩水消暑。"
+      "description": "任务输入为空，无法执行该任务。\n\n由于“任务输入”部分未提供任何标签数据（表格前几列的内容），因此无法根据标签推导并输出对应的场景释义。\n\n请您补充完整的任务输入数据（即包含前几列标签的文本数据），我将按照任务要求，根据前几列标签输出对应的场景释义。",
+      "weight": 2,
+      "weightLabel": "中"
     },
     {
-      "id": "s41",
-      "name": "萌宠长途无忧",
+      "id": "recvw63vZgAnS2",
+      "name": "毛孩长途无忧",
       "radius": "r4",
       "relation": "pet",
-      "description": "长途出行的宠物安全座椅与防护装备齐备。"
+      "description": "任务输入部分为空，未提供任何标签数据或引用文本，因此无法根据“前几列标签”生成对应的场景释义。\n\n为完成本任务，请补充以下信息：\n1. 包含标签列的原始数据表格或文本；\n2. 各列标签的具体内容（如场景类别、关键词、行为描述等）；\n3. 如有既定的场景释义对照标准，也请一并提供。\n\n在数据补齐后，我将严格按照任务要求输出场景释义，且输出内容不带括号和引号。",
+      "weight": 2,
+      "weightLabel": "中"
     },
     {
-      "id": "s42",
-      "name": "特需好物关怀座",
+      "id": "recvw63vZgDgkc",
+      "name": "一起去运动",
       "radius": "r1",
       "relation": "interest",
-      "description": "为同好准备的装备位，随时奔赴兴趣现场。"
+      "description": "任务输入为空，未提供任何标签数据或引用文本，因此无法根据前几列标签生成对应的场景释义。请补充完整的任务输入数据（包含标签列的信息），以便我按照任务要求输出场景释义。",
+      "weight": 1,
+      "weightLabel": "低"
     },
     {
-      "id": "s43",
-      "name": "晨跑去爬山",
+      "id": "recvw63vZg2Ggq",
+      "name": "毛孩幼儿园",
       "radius": "r2",
       "relation": "interest",
-      "description": "清晨开车到山脚，和跑友约一场山径。"
+      "description": "任务输入为空，未提供任何引用文本数据或标签列信息，因此无法执行“根据前几列标签输出场景释义”的任务。\n\n请补充完整的任务输入数据（例如包含标签列的表格或文本内容），我才能根据前几列的标签为您输出对应的场景释义。",
+      "weight": 2,
+      "weightLabel": "中"
     },
     {
-      "id": "s44",
-      "name": "周末撒「野」局",
+      "id": "recvw63vZgaN2B",
+      "name": "二次元痛车巡礼",
       "radius": "r2",
       "relation": "interest",
-      "description": "车友组队轻度越野，周末一起去野。"
+      "description": "任务输入为空，未提供任何标签数据，因此无法根据前几列标签生成场景释义。请补充完整的引用文本数据（包含标签列）后重新提交任务。",
+      "weight": 2,
+      "weightLabel": "中"
     },
     {
-      "id": "s45",
+      "id": "recvw63vZgtQye",
+      "name": "合法炸街的快乐",
+      "radius": "r2",
+      "relation": "interest",
+      "description": "任务输入为空，未提供任何引用文本数据或前几列标签信息，因此无法据此输出对应的场景释义。\n\n请补充完整的任务输入数据（即包含标签列的文本数据），我将严格按照任务要求，根据前几列标签内容输出相应的场景释义，且输出不带括号和引号。",
+      "weight": 2,
+      "weightLabel": "中"
+    },
+    {
+      "id": "recvw63vZgckXf",
+      "name": "晨看去跑山",
+      "radius": "r3",
+      "relation": "interest",
+      "description": "任务输入为空，未提供任何引用文本数据或前几列的标签信息，因此无法根据标签输出对应的场景释义。\n\n请补充任务输入数据（例如：包含标签列的表格或文本数据），我将按照任务要求，结合前几列标签为您输出相应的场景释义。",
+      "weight": 1,
+      "weightLabel": "低"
+    },
+    {
+      "id": "recvw63vZgRrXU",
+      "name": "周末撒‘野’局",
+      "radius": "r3",
+      "relation": "interest",
+      "description": "任务输入为空，未提供任何前几列标签数据，因此无法据此生成对应的场景释义。请补充包含标签列的完整输入数据后重新执行本任务。",
+      "weight": 2,
+      "weightLabel": "中"
+    },
+    {
+      "id": "recvw63vZgoOcb",
+      "name": "近郊‘4+2’行",
+      "radius": "r3",
+      "relation": "interest",
+      "description": "任务输入部分为空，未提供任何引用文本或标签数据，因此无法根据“前几列标签”输出场景释义。\n\n请补充任务输入数据（即包含标签列的文本内容），我将根据所提供的标签信息，严谨地输出对应的场景释义。",
+      "weight": 2,
+      "weightLabel": "中"
+    },
+    {
+      "id": "recvw63vZgR5DP",
       "name": "后备箱社交",
-      "radius": "r2",
-      "relation": "interest",
-      "description": "打开尾箱就是摊位，车友市集式社交。"
-    },
-    {
-      "id": "s46",
-      "name": "后排炫技屋",
-      "radius": "r2",
-      "relation": "interest",
-      "description": "在后排展示装备与手办，同好间的炫耀时刻。"
-    },
-    {
-      "id": "s47",
-      "name": "近郊「4+2」行",
       "radius": "r3",
       "relation": "interest",
-      "description": "四轮加两轮，车架载着自行车去郊外骑行。"
+      "description": "任务输入中的引用文本数据为空，缺少“前几列标签”的具体内容，因此无法根据标签输出对应的场景释义。\n\n请补充完整的任务输入数据（即包含标签列的文本数据），我将依据所提供的标签内容，严格按照任务要求输出相应的场景释义。",
+      "weight": 2,
+      "weightLabel": "中"
     },
     {
-      "id": "s48",
-      "name": "合法炫技的快乐",
+      "id": "recvw63vZgIK9D",
+      "name": "后排游戏屋",
       "radius": "r3",
       "relation": "interest",
-      "description": "在赛道日合规驰骋，释放驾控热情。"
+      "description": "任务输入为空，未提供任何引用文本数据或前几列标签内容，因此无法根据标签生成对应的场景释义。\n\n请补充完整的任务输入数据（即包含前几列标签的文本或表格内容），我将依据任务要求为您输出相应的场景释义。",
+      "weight": 1,
+      "weightLabel": "低"
     },
     {
-      "id": "s49",
+      "id": "recvw63vZgXwiD",
       "name": "去没有路的地方",
       "radius": "r4",
       "relation": "interest",
-      "description": "越野穿越无人之境，挑战极限地形。"
+      "description": "任务输入为空，未提供任何引用文本数据或前几列标签信息，因此无法根据标签输出对应的场景释义。\n\n请补充完整的任务输入数据（包括前几列的标签内容），我将依据标签信息为您输出准确的场景释义。",
+      "weight": 2,
+      "weightLabel": "中"
     },
     {
-      "id": "s50",
+      "id": "recvw63vZg5HhY",
       "name": "向高处进发",
       "radius": "r4",
       "relation": "interest",
-      "description": "自驾高原山地，奔赴海拔新高。"
+      "description": "任务输入为空，未能获取到前几列的标签数据，因此无法输出对应的场景释义。\n\n请补充完整的任务输入数据（包含前几列标签信息的文本内容），我将根据任务要求，结合标签内容严谨地生成相应的场景释义。",
+      "weight": 3,
+      "weightLabel": "高"
     },
     {
-      "id": "s51",
-      "name": "追开车边航拍",
+      "id": "recvw63vZgEizQ",
+      "name": "边开车边航拍",
       "radius": "r4",
       "relation": "interest",
-      "description": "无人机伴飞，记录长途自驾的壮阔视角。"
+      "description": "任务输入为空，未提供任何标签数据或表格内容，因此无法根据前几列标签生成场景释义。\n\n请补充任务输入中的标签数据，例如提供包含标签列的表格或文本内容，我将依据所给标签为您输出对应的场景释义。",
+      "weight": 3,
+      "weightLabel": "高"
     },
     {
-      "id": "s52",
-      "name": "一起去运动",
+      "id": "recvw63vZgIuMW",
+      "name": "从职场到商务社交",
       "radius": "r1",
       "relation": "business",
-      "description": "接送客户或同事赴约运动局，商务社交新场景。"
+      "description": "任务输入为空，缺少必要的引用文本数据（前几列标签），因此无法执行“根据标签输出场景释义”的任务。\n\n请您补充任务输入数据（例如包含标签列的表格或文本内容），我将根据所提供的标签信息，输出对应的场景释义。\n\n**示例格式参考：**\n- 若输入标签为：餐饮、午市、团购 → 场景释义：工作日午餐时段的餐厅团购消费场景\n- 若输入标签为：出行、夜间、打车 → 场景释义：夜间打车出行的用车服务场景\n\n请提供具体标签数据后，我将立即为您处理。",
+      "weight": 2,
+      "weightLabel": "中"
     },
     {
-      "id": "s53",
-      "name": "二次元堵车巡游",
+      "id": "recvw63vZgxfpj",
+      "name": "体面人的更衣室",
+      "radius": "r1",
+      "relation": "business",
+      "description": "任务输入为空，未提供任何引用文本数据或前几列标签信息，因此无法据此输出场景释义。\n\n请补充完整的任务输入数据（例如包含标签列的表格或文本内容），我将根据前几列标签为您输出对应的场景释义。",
+      "weight": 2,
+      "weightLabel": "中"
+    },
+    {
+      "id": "recvw63vZgiaI9",
+      "name": "老板的秘密头等舱",
       "radius": "r2",
       "relation": "business",
-      "description": "痛车文化与品牌巡游，商务展示的移动橱窗。"
+      "description": "根据任务框架，任务输入部分为空，未提供任何标签数据，因此无法根据前几列标签生成对应的场景释义。\n\n请补充任务输入数据（即各列标签内容），我将依据标签信息为您输出相应的场景释义。",
+      "weight": 2,
+      "weightLabel": "中"
     },
     {
-      "id": "s54",
-      "name": "从客变商务社交",
-      "radius": "r3",
-      "relation": "business",
-      "description": "短途接送途中，客户关系悄然升温。"
-    },
-    {
-      "id": "s55",
-      "name": "体面人的更衣室",
-      "radius": "r3",
-      "relation": "business",
-      "description": "车内更换正装，商务场合前后的体面缓冲。"
-    },
-    {
-      "id": "s56",
-      "name": "老板的秘密头等舱",
+      "id": "reczz28TgT1vqp9P",
+      "name": "测试场景",
       "radius": "r4",
-      "relation": "business",
-      "description": "后排隐私屏与商务配置，移动的总裁办公室。"
+      "relation": "family",
+      "description": "任务输入为空，无法执行任务。\n\n当前任务要求为“根据前几列标签，输出场景释义”，但任务输入部分未提供任何标签数据或引用文本，缺少必要的处理对象。\n\n请您补充提供包含前几列标签的任务输入数据，我将根据标签内容为您输出对应的场景释义。",
+      "weight": 3,
+      "weightLabel": "高"
     }
   ],
-  "fetchedAt": "2026-10-29T14:15:42.428Z"
+  "fetchedAt": "2026-10-30T16:25:19.904Z"
 }

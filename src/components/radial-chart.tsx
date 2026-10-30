@@ -61,10 +61,14 @@ const EN_R = 638;
 const BREATH_R = 648;
 
 const DEG = Math.PI / 180;
-/** 展开动画的收拢角度：全部格子从扇面起点（左端射线）像纸扇一样张开 */
-const ANCHOR = START_DEG * DEG;
-/** 首次出场：整扇连续展开时长 */
-const UNFOLD_MS = 1240;
+/** 首次出场：从内圈向外逐格弹出的波浪总时长 */
+const REVEAL_MS = 1400;
+/** 波浪错峰区间：外圈最迟在时间轴 45% 处才开始弹（内圈先弹、外圈后弹） */
+const WAVE_SPAN = 0.45;
+/** 同层卡片的随机错峰幅度（打散出场顺序，不做整齐划一的环） */
+const WAVE_JITTER = 0.15;
+/** 单张卡片放大回弹动画在时间轴上的占比 */
+const POP_DUR = 0.38;
 /** 筛选后的重排补间时长 */
 const MORPH_MS = 560;
 
@@ -115,13 +119,15 @@ interface RadialChartProps {
   resetTick: number;
 }
 
-/** 出场缓动：起步快、收尾慢而稳，像纸扇一次顺滑张开 */
-function easeOutQuart(t: number): number {
-  return 1 - (1 - t) ** 4;
-}
-
 function easeInOutCubic(t: number): number {
   return t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2;
+}
+
+/** 卡片弹出缓动：放大越过正常尺寸（峰值约 1.12 倍）后回落定住，即「先变大、缩回正常」的回弹 */
+function easeOutBack(t: number): number {
+  const c1 = 2.6;
+  const c3 = c1 + 1;
+  return 1 + c3 * (t - 1) ** 3 + c1 * (t - 1) ** 2;
 }
 
 interface CellLabel {
@@ -196,25 +202,6 @@ function buildTextureD(
   return segs.join(" ");
 }
 
-/** 收拢态：所有扇区角度压到扇面起点，半径保持不变（纸扇合拢的一瞬） */
-function collapseLayout(layout: Layout): Layout {
-  return {
-    ...layout,
-    bands: layout.bands.map((b) => ({ ...b, a0: ANCHOR, a1: ANCHOR })),
-    cells: layout.cells.map((c) => ({
-      ...c,
-      a0: ANCHOR,
-      a1: ANCHOR,
-      mid: ANCHOR,
-    })),
-    placeholders: layout.placeholders.map((p) => ({
-      ...p,
-      a0: ANCHOR,
-      a1: ANCHOR,
-    })),
-  };
-}
-
 /**
  * 布局插值：角度与半径同时补间，保证筛选重排时格子既不跳变也不塌缩；
  * 新出现的格子从自身中角零宽生长，消失的格子直接淡出（由 React 卸载）。
@@ -272,18 +259,25 @@ function lerpLayout(from: Layout, to: Layout, t: number): Layout {
 }
 
 /**
- * 布局动画控制器：单一 rAF 时间轴驱动，取代「逐格 CSS pop」的碎片化节奏。
- * 首次挂载从合拢态一次性连续展开（UNFOLD_MS），
- * 之后的筛选/开关变化从当前画面平滑补间到新布局（MORPH_MS）。
- * reveal 返回出场进度（0~1），供文字/织纹等非几何元素对齐同一节奏淡入。
+ * 布局动画控制器：单一 rAF 时间轴驱动。
+ * 首次出场 = 由内圈向外的卡片波浪：几何直接用目标布局，
+ * 每张卡片按所在层（内→外）加随机延迟依次弹出，
+ * 单卡先放大越过正常尺寸再回缩定住（easeOutBack，见 cellPop）。
+ * 之后的筛选/开关变化仍从当前画面平滑补间到新布局（MORPH_MS）。
+ * reveal 为出场时间轴进度（0~1），供单卡弹出与织纹/标题淡入共用。
  */
-function useAnimatedLayout(target: Layout): { layout: Layout; reveal: number } {
-  const [state, setState] = useState(() => ({
-    layout: collapseLayout(target),
-    reveal: 0,
-  }));
-  const currentRef = useRef<Layout>(state.layout);
-  /** 出场展开是否已完整跑完一次（StrictMode 二次挂载时会重新完整展开） */
+function useAnimatedLayout(target: Layout): {
+  layout: Layout;
+  reveal: number;
+  phase: "unfold" | "morph";
+} {
+  const [state, setState] = useState<{
+    layout: Layout;
+    reveal: number;
+    phase: "unfold" | "morph";
+  }>(() => ({ layout: target, reveal: 0, phase: "unfold" }));
+  const currentRef = useRef<Layout>(target);
+  /** 出场波浪是否已完整跑完一次（StrictMode 二次挂载会重新完整播放） */
   const settledRef = useRef(false);
 
   useEffect(() => {
@@ -291,26 +285,35 @@ function useAnimatedLayout(target: Layout): { layout: Layout; reveal: number } {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       currentRef.current = target;
       settledRef.current = true;
-      setState({ layout: target, reveal: 1 });
+      setState({ layout: target, reveal: 1, phase: "morph" });
       return;
     }
-    // 首次：从合拢态连续展开；之后：从当前画面平滑补间到新布局
-    const from = currentRef.current;
     const first = !settledRef.current;
-    const duration = first ? UNFOLD_MS : MORPH_MS;
+    const from = currentRef.current;
+    const duration = first ? REVEAL_MS : MORPH_MS;
     const startedAt = performance.now();
     let raf = 0;
 
     const tick = (now: number) => {
       const raw = Math.min(1, (now - startedAt) / duration);
-      const eased = first ? easeOutQuart(raw) : easeInOutCubic(raw);
+      if (first) {
+        // 出场几何不插值：每卡缩放变换由 popDelay / cellPop 驱动
+        currentRef.current = target;
+        if (raw < 1) {
+          setState({ layout: target, reveal: raw, phase: "unfold" });
+          raf = requestAnimationFrame(tick);
+        } else {
+          settledRef.current = true;
+          setState({ layout: target, reveal: 1, phase: "morph" });
+        }
+        return;
+      }
+      const eased = easeInOutCubic(raw);
       const layout = lerpLayout(from, target, eased);
       currentRef.current = layout;
-      setState({ layout, reveal: first ? raw : 1 });
+      setState({ layout, reveal: 1, phase: "morph" });
       if (raw < 1) {
         raf = requestAnimationFrame(tick);
-      } else if (first) {
-        settledRef.current = true;
       }
     };
 
@@ -407,13 +410,45 @@ export default function RadialChart(props: RadialChartProps) {
     [scenes, activeScenes, proportional],
   );
 
-  const { layout, reveal } = useAnimatedLayout(target);
+  const { layout, reveal, phase } = useAnimatedLayout(target);
 
-  /** 文字/织纹淡入节奏：跟扇形展开共用一条时间轴，收尾时贴合 */
-  const labelOpacity =
-    reveal >= 1 ? 1 : Math.max(0, Math.min(1, (reveal - 0.3) / 0.42));
+  /** 每张卡片的出场延迟（归一化时间轴）：按所在层从内到外形成波浪，随机抖动打散同层齐出 */
+  const popDelay = useMemo(() => {
+    const map = new Map<string, number>();
+    for (const c of target.cells) {
+      const rm = (c.r0 + c.r1) / 2;
+      const wave = ((rm - INNER) / (OUTER_R - INNER)) * WAVE_SPAN;
+      map.set(c.scene.id, wave + Math.random() * WAVE_JITTER);
+    }
+    return map;
+  }, [target]);
+
+  /** 出场波浪的单卡瞬时状态：以格子中心为原点，先放大越过正常尺寸再回缩定住 */
+  const cellPop = useMemo(() => {
+    if (phase !== "unfold") return null;
+    const map = new Map<
+      string,
+      { s: number; op: number; x: number; y: number }
+    >();
+    for (const c of layout.cells) {
+      const d = popDelay.get(c.scene.id) ?? 0;
+      const p = Math.max(0, Math.min(1, (reveal - d) / POP_DUR));
+      const pt = polar(CX, CY, (c.r0 + c.r1) / 2, (c.a0 + c.a1) / 2);
+      map.set(c.scene.id, {
+        s: p <= 0 ? 0 : Math.max(0, easeOutBack(p)),
+        op: Math.min(1, p * 2.4),
+        x: pt.x,
+        y: pt.y,
+      });
+    }
+    return map;
+  }, [phase, reveal, layout, popDelay]);
+
+  /** 织纹/标题淡入节奏：出场波浪推进过半后渐显，收尾完全对齐 */
   const chromeOpacity =
-    reveal >= 1 ? 1 : Math.max(0, Math.min(1, (reveal - 0.45) / 0.4));
+    phase === "unfold"
+      ? Math.max(0, Math.min(1, (reveal - 0.45) / 0.4))
+      : 1;
 
   const activeIds = useMemo(
     () => new Set(activeScenes.map((s) => s.id)),
@@ -878,7 +913,14 @@ export default function RadialChart(props: RadialChartProps) {
             })()}
 
             {/* 空扇区占位色块（该分区暂无场景数据，维持矩阵网格完整） */}
-            {layout.placeholders.map((ph) => (
+            {layout.placeholders.map((ph) => {
+              const rw =
+                (((ph.r0 + ph.r1) / 2 - INNER) / (OUTER_R - INNER)) * WAVE_SPAN;
+              const pp =
+                phase !== "unfold"
+                  ? 1
+                  : Math.max(0, Math.min(1, (reveal - rw) / POP_DUR));
+              return (
               <path
                 key={`ph-${ph.relation}-${ph.radius}`}
                 d={roundedSectorPath(
@@ -892,8 +934,10 @@ export default function RadialChart(props: RadialChartProps) {
                 )}
                 fill="url(#grad-empty)"
                 pointerEvents="none"
+                style={{ opacity: pp }}
               />
-            ))}
+              );
+            })}
 
             {/* 场景扇形 */}
             {layout.cells.map((cell) => {
@@ -904,6 +948,10 @@ export default function RadialChart(props: RadialChartProps) {
                 ? `url(#grad-${cell.scene.radius})`
                 : "#e7eee9";
               const fit = fitMap.get(cell.scene.id) ?? null;
+              // 出场波浪：单卡围绕自身中心放大回缩；波浪结束后恢复常态渲染
+              const pop = cellPop?.get(cell.scene.id);
+              const labelOp = pop ? pop.op : 1;
+              const hidden = pop !== undefined && pop.s < 0.004;
               const rLabel = Math.max((cell.r0 + cell.r1) / 2, INNER + 2);
               // 沿弧弯曲：文字经 textPath 贴格子中弧（a0→a1 顺时针），字字相随圆弧
               const da = Math.min((cell.a1 - cell.a0) * 0.04, 0.012);
@@ -912,7 +960,16 @@ export default function RadialChart(props: RadialChartProps) {
               const showTip = (px: number, py: number, flip: boolean) =>
                 updateHover({ cell, px, py, flip });
               return (
-                <g key={cell.scene.id}>
+                <g
+                  key={cell.scene.id}
+                  style={{
+                    opacity: pop ? pop.op : 1,
+                    transform: pop
+                      ? `translate(${pop.x}px, ${pop.y}px) scale(${pop.s}) translate(${-pop.x}px, ${-pop.y}px)`
+                      : undefined,
+                    visibility: hidden ? "hidden" : undefined,
+                  }}
+                >
                   <path
                     d={roundedSectorPath(
                       CX,
@@ -956,7 +1013,7 @@ export default function RadialChart(props: RadialChartProps) {
                     onMouseLeave={() => setHover(null)}
                     onClick={() => onSelect(cell.scene)}
                   />
-                  {fit && labelOpacity > 0 && (
+                  {fit && labelOp > 0.01 && (
                     <>
                       <path
                         id={`scl-${cell.scene.id}`}
@@ -977,7 +1034,9 @@ export default function RadialChart(props: RadialChartProps) {
                         style={{
                           transition: "fill 240ms ease, opacity 200ms ease",
                           paintOrder: "stroke",
-                          opacity: isActive ? labelOpacity : labelOpacity * 0.8,
+                          opacity: isActive
+                            ? labelOp
+                            : labelOp * 0.8,
                         }}
                       >
                         <textPath href={`#scl-${cell.scene.id}`} startOffset="50%">
