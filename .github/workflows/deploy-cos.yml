@@ -48,6 +48,13 @@ jobs:
             echo "::error::out/index.html 里没有 ${COS_SUB_PATH}/_next/ 资源前缀，basePath 未生效，中止上传"
             exit 1
           fi
+          # 已配置飞书凭证：快照必须真正来自飞书表格，防止凭证失效时静默发布内置数据
+          if [ -n "${FEISHU_APP_ID}" ] && ! grep -q '"source": *"feishu"' out/data/scenes.json; then
+            echo "::error::已配置飞书凭证但快照 source 不是 feishu（可能凭证失效或拉表失败），中止上传"
+            exit 1
+          fi
+        env:
+          FEISHU_APP_ID: ${{ secrets.FEISHU_APP_ID }}
 
       - name: Deploy to COS
         uses: zkqiang/tencent-cos-action@v0.1.0
